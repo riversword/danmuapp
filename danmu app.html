@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <style type="text/css">
+.main{
+	width:100%;
+	height:100%;
+}
 .danmuBox{
 	position:relative;
 	width:90%;
@@ -10,19 +14,20 @@
 	border:2px rgba(20,30,40,0.4) solid;
 	margin:20px auto;
 	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: -10px 10px 10px rgba(17,27,37,0.6);
 }
 .danmuBox p{
-	position:absolute;
-	width:30px;
+	position:relative;
 	height:20px;
 	font-size: 20px;
-	animation: show 8s infinite;
 	font-weight: bold;
-	/*border:2px rgba(250,250,0,0.5) solid;*/
-	
+	display:inline-block;
 }
 .btn{
 	text-align:center;
+	margin-top: 50px;
+	margin-bottom: 100px;
 }
 .btn input{
 	outline: none;
@@ -40,9 +45,11 @@
 }
 .btn input[name="clear"]:hover{
 	background-color: rgba(255,50,0,0.8);
+	box-shadow: 0 4px 4px rgba(17,27,37,0.6);
 }
 .btn input[name="launch"]:hover{
 	background-color: rgba(0,60,250,0.8);
+	box-shadow: -0 4px 4px rgba(17,27,37,0.6);
 }
 .btn input[type="text"]{
 	height:30px;
@@ -57,24 +64,43 @@
 	border:2px rgba(0,137,247,0.9) solid;
 	box-shadow: 0px 4px 4px rgba(17,27,37,0.6);
 }
-@keyframes show
-{
-	from {right:20px;}
-	to {right:1180px;}
+.footer{
+	width:100%;
+	height:60px;
+    line-height: 30px;
+    text-align: center;
+    font-family: Georgia,Times ;
+    font-size: 14px;
 }
-
-@-webkit-keyframes show /* Safari and Chrome */
-{
-	from {right:20px;}
-	to {right:1180px;}
+.footer a{
+	text-decoration: none;
 }
 </style>
-
 </head>
 <body>
 <div class="main">
-	<div class="danmuBox"></div>
-	<div class="btn"><input type="button" value="清空" name="clear"><input type="text" name"inputValue" placeholder="输入文字并"><input type="button" value="发射" name="launch"></div>
+	<div class="danmuBox">
+	</div>
+	<div class="btn">
+		<input type="button" value="清空" name="clear">
+		<input type="text" name="inputValue" list="tipsList" placeholder="输入文字并发射">
+		<datalist id="tipsList">
+				<option value="“yes, you're right, you're so clever!”"></option>
+				<option value="“this really touch me！”"></option>
+				<option value="“我是好人”"></option>
+				<option value="“我的天”"></option>
+				<option value="偶像"></option>
+				<option value="大师兄"></option>
+				<option value="天才"></option>
+				<option value="“计几”"></option>
+				<option value="Σ(っ°Д°;)っ"></option>
+				<option value="（╬￣皿￣）＝○＃（￣＃）３￣） "></option>
+				<option value="(ｏ´･ｪ･)っ快点"></option>
+				<option value="（づ￣3￣）づ╭❤～"></option>
+		</datalist>
+		<input type="button" value="发射" name="launch">
+	</div>
+	<div class="footer"><span>Copyright &copy;2017&nbsp;riversword.&nbsp;All rights reserved. </span> <br> <span>The data service is from <a href="https://www.wilddog.com" >wilddog</a>. </span></div>
 </div>
 <script src = "https://cdn.wilddog.com/js/client/current/wilddog.js" ></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
@@ -82,66 +108,76 @@
 $(document).ready(function(){
 	var ref=new Wilddog("https://wd4369133961ampsgk.wilddogio.com"),
 	colors=['#000000','#EA0000','#FF0080','#D200D2','#0000E3','#00FFFF','#00DB00','#F9F900','#FF8000','#808040'],
-	j=0;
+	j=0,  //待完善，用于控制，danmuBox中元素的数量
+	_top=0;
+	var colNum=Math.floor(Math.random()*10);
 
-	$("input[name='clear']").click(function(){
-	$('.danmuBox p').remove();
-	ref.set(null);
-	});
-
-	$("input[name='launch']").click(function(){
-	if($("input:text").val()!=''){
-		ref.push($("input:text").val());
-	//console.log($("input:text").val());  //为何用其他方式的选择器$("input[name='inputValue']")，打印出为undefine
-		$("input:text").val('');
-	}
-	});
-	$("input:text").keypress(function(event){
-		if(event.keyCode=='13'){
-			$("input[name='launch']").click();
+	$('input[name="launch"]').click(function(){
+		if($('input:text').val() !==''){
+			ref.child('content').push($('input:text').val());
+			$('input:text').val('');
 		}
 	});
-	ref.orderByKey().limitToLast(1).on("child_added",function(snap){//为何一刷新就会触发该事件
-	if(j>9){j=0;}
-	if($('.danmuBox p').length <10){
-		$('.danmuBox').append("<p style='color:"+colors[j]+"'>"+snap.val()+"</p><br><br>");
-	//console.log(snap.val());
-	}else{
-		$('.danmuBox p').eq(0).remove();
-		$('.danmuBox br').eq(0).remove();
-		$('.danmuBox br').eq(1).remove();	
-		$('.danmuBox').append("<p style='color:"+colors[j]+"'>"+snap.val()+"</p><br><br>");
-	}
-	j++;
+
+	ref.child('content').limitToLast(1).on("child_added",function(snap){
+		//为何刷新和打开网页时，会执行一次。
+		if(_top < 450){
+			var objContent=$('<p></p>');
+			var objNode=objContent.text(snap.val());
+			$('.danmuBox').append(objNode);
+			setStyle(objNode);
+			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
+			
+			_top+=30;
+			colNum=Math.floor(Math.random()*10);
+		}else{
+			_top=0;
+			var addContent=$('<p></p>');
+			var addNode=addContent.text(snap.val());
+			$('.danmuBox').append(addNode);
+			setStyle(addNode);
+			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
+			_top+=30;
+		}
+		j++;
 	});
-})
 
+	$('input:text').keypress(function(event){
+		if(event.keyCode =='13'){
+			$('input[name="launch"]').click();
+		}
+	});
 
-
-
-/*
-ref.on()   //数据有变动时，就会被调用一次。监听事件
-ref.off()   //删除监听
-ref.once()  //仅触发一次
-ref.child("key1").set("test1");
-ref.child("key1").set(null);
-ref.child("key1").set("test1");
-ref.child("key1").remove();
-ref.child("key1").set({"name":"piao","age":20,"sex":"male"});
-ref.child("key1/name").set("ha");
-ref.child("key1").child("name").set("jian");
-ref.child("key1").update({"name":"表哥"});
-ref.push("我的天！")
-ref.push("第9个").setPriority(9);
-ref.push("第8个").setPriority(8);
-ref.push("第3个").setPriority(3);
-ref.push("第7个").setPriority(7);
-ref.orderByPriority().startAt(7).limitToFirst(2).on("child_added",function(snap,prvKey){console.log("按priority排序查询新添加节点",snap.key(),":",snap.val(),"prior:",snap.getPriority,"上一个key是：",prvKey)});
-ref.orderByPriority().startAt(7).limitToFirst(2).on("child_added",function(snap,prvKey){console.log("按priority排序查询新添加节点",snap.key(),":",snap.val(),"prior:",snap.getPriority,"上一个key是：",prvKey); insert(snap.key(),snap.val(),prvKey)});
-*/
+	$('input[name="clear"]').click(function(){
+		$('.danmuBox').empty();
+		ref.child('content').set(null);
+		_top=0;
+		j=0
+	});
+	function setStyle(obj){
+		//待完善，获取屏幕尺寸，_right= obj.offset().left -屏幕宽*90%
+		var _right= obj.offset().left - 1300;
+		console.log(obj.offset().left);
+		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2));
+		console.log(_rightEnd);
+		obj.css({
+			color:colors[colNum],
+			right:_right,
+			top:_top
+		});
+		startAnimation();
+		function startAnimation(){
+			obj.css({right:_right});
+			obj.animate({right:_rightEnd},8000,"linear",startAnimation);
+		}
+		
+	}
+	//页面关闭或刷新时清空数据库
+	window.onbeforeunload = function(){
+    $('input[name="clear"]').click();
+	};
+});
 
 </script>
-
 </body>
-
 </html>
