@@ -1,85 +1,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
-<style type="text/css">
-.main{
-	width:100%;
-	height:100%;
-}
-.danmuBox{
-	position:relative;
-	width:90%;
-	height:480px;
-	border:2px rgba(20,30,40,0.4) solid;
-	margin:20px auto;
-	border-radius: 10px;
-	overflow: hidden;
-	box-shadow: -10px 10px 10px rgba(17,27,37,0.6);
-}
-.danmuBox p{
-	position:relative;
-	height:20px;
-	font-size: 20px;
-	font-weight: bold;
-	display:inline-block;
-}
-.btn{
-	text-align:center;
-	margin-top: 50px;
-	margin-bottom: 100px;
-}
-.btn input{
-	outline: none;
-	height:30px;
-	border-radius: 5px;
-}
-.btn input[type="button"]{
-	text-align: center;
-	height:30px;
-	width:70px;
-	background-color: rgba(27,37,47,0.4);
-	border:1px rgba(137,200,240,0.8) solid;
-	color:rgba(255,255,255,1);
-	font-size: 18px;
-}
-.btn input[name="clear"]:hover{
-	background-color: rgba(255,50,0,0.8);
-	box-shadow: 0 4px 4px rgba(17,27,37,0.6);
-}
-.btn input[name="launch"]:hover{
-	background-color: rgba(0,60,250,0.8);
-	box-shadow: -0 4px 4px rgba(17,27,37,0.6);
-}
-.btn input[type="text"]{
-	height:30px;
-	width:400px;
-	margin:0 20px 0;
-	border:2px rgba(27,37,47,0.5) solid;
-	border-radius:10px;
-	font-size: 20px;
-	padding-left: 10px;
-}
-.btn input[type="text"]:focus{
-	border:2px rgba(0,137,247,0.9) solid;
-	box-shadow: 0px 4px 4px rgba(17,27,37,0.6);
-}
-.footer{
-	width:100%;
-	height:60px;
-    line-height: 30px;
-    text-align: center;
-    font-family: Georgia,Times ;
-    font-size: 14px;
-}
-.footer a{
-	text-decoration: none;
-}
-</style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<link rel="stylesheet" type="text/css" href="danmu app.css">
 </head>
 <body>
 <div class="main">
 	<div class="danmuBox">
+		<!-- <p style="top:30px;color:#EA0000">第1个</p> <p style="top:60px;color:#D200D2">第2个</p> <p style="top:90px;color:#0000E3">第3个</p> <p style="top:120px;color:#00FFFF">第4个</p>  -->
 	</div>
 	<div class="btn">
 		<input type="button" value="清空" name="clear">
@@ -104,80 +33,6 @@
 </div>
 <script src = "https://cdn.wilddog.com/js/client/current/wilddog.js" ></script>
 <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	var ref=new Wilddog("https://wd4369133961ampsgk.wilddogio.com"),
-	colors=['#000000','#EA0000','#FF0080','#D200D2','#0000E3','#00FFFF','#00DB00','#F9F900','#FF8000','#808040'],
-	j=0,  //待完善，用于控制，danmuBox中元素的数量
-	_top=0;
-	var colNum=Math.floor(Math.random()*10);
-
-	$('input[name="launch"]').click(function(){
-		if($('input:text').val() !==''){
-			ref.child('content').push($('input:text').val());
-			$('input:text').val('');
-		}
-	});
-
-	ref.child('content').limitToLast(1).on("child_added",function(snap){
-		//为何刷新和打开网页时，会执行一次。
-		if(_top < 450){
-			var objContent=$('<p></p>');
-			var objNode=objContent.text(snap.val());
-			$('.danmuBox').append(objNode);
-			setStyle(objNode);
-			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
-			
-			_top+=30;
-			colNum=Math.floor(Math.random()*10);
-		}else{
-			_top=0;
-			var addContent=$('<p></p>');
-			var addNode=addContent.text(snap.val());
-			$('.danmuBox').append(addNode);
-			setStyle(addNode);
-			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
-			_top+=30;
-		}
-		j++;
-	});
-
-	$('input:text').keypress(function(event){
-		if(event.keyCode =='13'){
-			$('input[name="launch"]').click();
-		}
-	});
-
-	$('input[name="clear"]').click(function(){
-		$('.danmuBox').empty();
-		ref.child('content').set(null);
-		_top=0;
-		j=0
-	});
-	function setStyle(obj){
-		//待完善，获取屏幕尺寸，_right= obj.offset().left -屏幕宽*90%
-		var _right= obj.offset().left - 1300;
-		console.log(obj.offset().left);
-		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2));
-		console.log(_rightEnd);
-		obj.css({
-			color:colors[colNum],
-			right:_right,
-			top:_top
-		});
-		startAnimation();
-		function startAnimation(){
-			obj.css({right:_right});
-			obj.animate({right:_rightEnd},8000,"linear",startAnimation);
-		}
-		
-	}
-	//页面关闭或刷新时清空数据库
-	window.onbeforeunload = function(){
-    $('input[name="clear"]').click();
-	};
-});
-
-</script>
+<script type="text/javascript" src="danmu app.js"></script>
 </body>
 </html>
