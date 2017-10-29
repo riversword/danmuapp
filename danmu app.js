@@ -1,19 +1,16 @@
+/*create by riversword*/
 $(document).ready(function(){
 	var ref=new Wilddog("https://wd4369133961ampsgk.wilddogio.com"),
-	colors=['#000000','#EA0000','#FF0080','#D200D2','#0000E3','#00FFFF','#00DB00','#F9F900','#FF8000','#808040'],
-	//topMax=$('.danmuBox').css('height'),
-	j=0,  //待完善，用于控制，danmuBox中元素的数量
-	_top=0,
-	topLimit=450;
+		colors=['#000000','#EA0000','#FF0080','#D200D2','#0000E3','#00FFFF','#00DB00','#F9F900','#FF8000','#808040'],
+		j=0,  //need to perfect, used to limit the number of elements in danmuBox
+		_top=0,
+		topLimit=450;
 	var colNum=Math.floor(Math.random()*10);
-	//console.log("网页宽度是"+document.body.clientWidth);
-	//console.log("打印的数据类型是"+typeof(document.body.clientWidth));
+
 	if(document.body.clientWidth < 640){
    		topLimit=390;
  	}
-	//console.log('屏幕宽为'+window.screen.availWidth);
-	//console.log('屏幕高为'+window.screen.availHeight);
-	//var deviceWid=window.screen.availWidth;
+
 	$('input[name="launch"]').click(function(){
 		if($('input:text').val() !==''){
 			ref.child('content').push($('input:text').val());
@@ -22,14 +19,13 @@ $(document).ready(function(){
 	});
 
 	ref.child('content').limitToLast(1).on("child_added",function(snap){
-		//为何刷新和打开网页时，会执行一次。
+					//every time the web page refreshed, "child_added" will happen in wilddog touched by the last child
+
 		if(_top < topLimit){
 			var objContent=$('<p></p>');
 			var objNode=objContent.text(snap.val());
 			$('.danmuBox').append(objNode);
 			setStyle(objNode);
-			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
-			
 			_top+=30;
 			colNum=Math.floor(Math.random()*10);
 		}else{
@@ -38,7 +34,6 @@ $(document).ready(function(){
 			var addNode=addContent.text(snap.val());
 			$('.danmuBox').append(addNode);
 			setStyle(addNode);
-			/*$('.danmuBox').append("<p style=\'top:"+_top+"px;color:"+colors[colNum]+"\'>"+snap.val()+"</p>");*/
 			_top+=30;
 		}
 		j++;
@@ -57,16 +52,10 @@ $(document).ready(function(){
 		j=0
 	});
 
-	//浏览器窗口改变时，需要重新调整、展示所有数据(待完善)
-
 	function setStyle(obj){
-		//获取屏幕尺寸，_right= obj.offset().left -屏幕宽*90%
-		//var deviceWid=window.screen.availWidth;
-		var deviceWid=document.body.clientWidth;
-		var _right= obj.offset().left - deviceWid*0.9;
-		console.log(obj.offset().left);
-		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2));
-		console.log(_rightEnd);
+		var deviceWid=document.body.clientWidth; 
+		var _right= obj.offset().left - deviceWid*0.9; //the position begin
+		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2)); //the position end
 		obj.css({
 			color:colors[colNum],
 			right:_right,
@@ -79,7 +68,9 @@ $(document).ready(function(){
 		}
 		
 	}
-	//页面关闭或刷新时清空数据库
+
+	//every time the web page refreshed, "child_added" will happen in wilddog touched by the last child
+	//so when the page refresh or close, the data in wilddog will be cleared 
 	window.onbeforeunload = function(){
     $('input[name="clear"]').click();
 	};
