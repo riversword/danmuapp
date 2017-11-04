@@ -2,7 +2,7 @@
 $(document).ready(function(){
 	var ref=new Wilddog("https://wd4369133961ampsgk.wilddogio.com"),
 		colors=['#000000','#EA0000','#FF0080','#D200D2','#0000E3','#00FFFF','#00DB00','#F9F900','#FF8000','#808040'],
-		j=0,  //need to perfect, used to limit the number of elements in danmuBox
+		j=0,  //待完善，用于控制，danmuBox中元素的数量
 		_top=0,
 		topLimit=450;
 	var colNum=Math.floor(Math.random()*10);
@@ -19,7 +19,7 @@ $(document).ready(function(){
 	});
 
 	ref.child('content').limitToLast(1).on("child_added",function(snap){
-					//every time the web page refreshed, "child_added" will happen in wilddog touched by the last child
+					//刷新和打开网页时，会执行一次。
 
 		if(_top < topLimit){
 			var objContent=$('<p></p>');
@@ -54,8 +54,8 @@ $(document).ready(function(){
 
 	function setStyle(obj){
 		var deviceWid=document.body.clientWidth; 
-		var _right= obj.offset().left - deviceWid*0.9; //the position begin
-		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2)); //the position end
+		var _right= obj.offset().left - deviceWid*0.9; //获取屏幕尺寸，_right= obj.offset().left -屏幕宽*90%
+		var _rightEnd=obj.offset().left + Number(obj.css('width').slice(0,-2)); 
 		obj.css({
 			color:colors[colNum],
 			right:_right,
@@ -69,8 +69,7 @@ $(document).ready(function(){
 		
 	}
 
-	//every time the web page refreshed, "child_added" will happen in wilddog touched by the last child
-	//so when the page refresh or close, the data in wilddog will be cleared 
+	//页面关闭或刷新时清空数据库
 	window.onbeforeunload = function(){
     $('input[name="clear"]').click();
 	};
