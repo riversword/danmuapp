@@ -1,0 +1,129 @@
+.main{
+	width:100%;
+	height:100%;
+	/*position:relative;*/
+}
+.danmuBox{
+	position:relative;
+	width:90%;
+	height:480px;
+	border:2px rgba(20,30,40,0.4) solid;
+	margin:20px auto;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: -10px 10px 10px rgba(17,27,37,0.6);
+}
+.danmuBox p{
+	position:relative;
+	/*position:absolute;*/
+	/*width:60px;*/
+	height:20px;
+	font-size: 20px;
+	/*animation: show 8s infinite;*/
+	font-weight: bold;
+	/*border: 2px rgba(200,200,0,0.8) solid;*/
+	display:inline-block;
+}
+.btn{
+	text-align:center;
+	margin-top: 50px;
+	margin-bottom: 100px;
+	/*border: 2px rgb(255,0,0) solid;*/
+}
+.btn input{
+	outline: none;
+	height:30px;
+	border-radius: 5px;
+}
+.btn input[type="button"]{
+	text-align: center;
+	height:30px;
+	width:70px;
+	background-color: rgba(27,37,47,0.4);
+	border:1px rgba(137,200,240,0.8) solid;
+	color:rgba(255,255,255,1);
+	font-size: 18px;
+}
+.btn input[name="clear"]:hover{
+	background-color: rgba(255,50,0,0.8);
+	box-shadow: 0 4px 4px rgba(17,27,37,0.6);
+}
+.btn input[name="launch"]:hover{
+	background-color: rgba(0,60,250,0.8);
+	box-shadow: -0 4px 4px rgba(17,27,37,0.6);
+}
+.btn input[type="text"]{
+	height:30px;
+	width:400px;
+	margin:0 20px 0;
+	border:2px rgba(27,37,47,0.5) solid;
+	border-radius:10px;
+	font-size: 20px;
+	padding-left: 10px;
+}
+.btn input[type="text"]:focus{
+	border:2px rgba(0,137,247,0.9) solid;
+	box-shadow: 0px 4px 4px rgba(17,27,37,0.6);
+}
+@keyframes show
+{
+	from {right:-100%;}
+	to {right:100px;}
+}
+@-webkit-keyframes show /* Safari and Chrome */
+{
+	from {right:-100%;}
+	to {right:100px;}
+}
+
+.footer{
+	width:100%;
+	height:60px;
+    line-height: 30px;
+    text-align: center;
+    font-family: Georgia,Times ;
+    font-size: 14px;
+    /*background-color: rgba(7,80,200,0.8);*/
+}
+.footer a{
+	text-decoration: none;
+}
+@media screen and (max-width: 640px){
+
+ .danmuBox{
+height:390px;
+}
+.btn{
+	/*border: 2px rgb(255,0,0) solid;*/
+	margin-top: 10px;
+	margin-bottom: 80px;
+	position:relative; 
+}
+.btn input[name="clear"]:hover{
+	background-color: rgba(27,37,47,0.4);
+	box-shadow: none;
+}
+.btn input[name="clear"]{
+	position: absolute;
+	top:40px;
+	left:20%;
+}
+.btn input[name="launch"]:hover{
+	background-color: rgba(27,37,47,0.4);
+	box-shadow: none;
+
+}
+.btn input[name="launch"]{
+	position:absolute;
+	top:40px;
+	right:20%;
+}
+.btn input[type="text"]{
+	width:90%;
+	margin:0 auto;
+}
+datalist{
+	display:none;
+}
+
+}
