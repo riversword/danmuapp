@@ -1,8 +1,8 @@
 ## 弹幕
 
-用到 野狗 SDK 做数据存储。预览 [demo](http://riversword.github.io/danmuapp/)
+预览 [demo](http://riversword.github.io/danmuapp/)
 
-![](https://github.com/riversworddanmuapp/blob/master/danmu.gif)
+![](https://github.com/riversword/danmuapp/blob/master/danmu.gif)
 
 
 
